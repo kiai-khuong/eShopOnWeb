@@ -32,7 +32,12 @@ public class CatalogViewModelService : ICatalogViewModelService
         _uriComposer = uriComposer;
     }
 
-    public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId)
+    /// <summary>
+    /// Fetches catalog items for a specific page, filtered by brand and type.
+    /// Optimization: Accepts optional pre-fetched brands and types to avoid redundant database calls.
+    /// Expected impact: Reduces 2 database queries per catalog page cache miss.
+    /// </summary>
+    public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId, IEnumerable<SelectListItem>? brands = null, IEnumerable<SelectListItem>? types = null)
     {
         _logger.LogInformation("GetCatalogItems called.");
 
@@ -53,8 +58,8 @@ public class CatalogViewModelService : ICatalogViewModelService
                 PictureUri = _uriComposer.ComposePicUri(i.PictureUri),
                 Price = i.Price
             }).ToList(),
-            Brands = (await GetBrands()).ToList(),
-            Types = (await GetTypes()).ToList(),
+            Brands = (brands ?? (await GetBrands())).ToList(),
+            Types = (types ?? (await GetTypes())).ToList(),
             BrandFilterApplied = brandId ?? 0,
             TypesFilterApplied = typeId ?? 0,
             PaginationInfo = new PaginationInfoViewModel()
