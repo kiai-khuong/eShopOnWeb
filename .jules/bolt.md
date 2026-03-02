@@ -1,0 +1,3 @@
+## 2025-05-15 - [Optimization of redundant database calls in cached service]
+**Learning:** In a decorator-based caching architecture, the underlying service might perform redundant operations that the decorator has already performed or could provide. In this case, `CatalogViewModelService.GetCatalogItems` was always fetching `Brands` and `Types` from the database, even when called from `CachedCatalogViewModelService` which already had them in cache.
+**Action:** Update the service interface to accept optional pre-fetched data. This allows the caching decorator to inject already-cached results into the base service, reducing database load on cache misses for aggregate view models.

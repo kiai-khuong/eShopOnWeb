@@ -26,14 +26,21 @@ public class CachedCatalogViewModelService : ICatalogViewModelService
                 })) ?? new List<SelectListItem>();
     }
 
-    public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId)
+    /// <summary>
+    /// Fetches catalog items using memory cache.
+    /// Optimization: Leverages cached brands and types to avoid redundant database calls when a catalog page is a cache miss.
+    /// Expected impact: Reduces 2 database queries per catalog page cache miss.
+    /// </summary>
+    public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId, IEnumerable<SelectListItem>? brands = null, IEnumerable<SelectListItem>? types = null)
     {
         var cacheKey = CacheHelpers.GenerateCatalogItemCacheKey(pageIndex, Constants.ITEMS_PER_PAGE, brandId, typeId);
 
         return (await _cache.GetOrCreateAsync(cacheKey, async entry =>
         {
             entry.SlidingExpiration = CacheHelpers.DefaultCacheDuration;
-            return await _catalogViewModelService.GetCatalogItems(pageIndex, itemsPage, brandId, typeId);
+            var brandsData = brands ?? await GetBrands();
+            var typesData = types ?? await GetTypes();
+            return await _catalogViewModelService.GetCatalogItems(pageIndex, itemsPage, brandId, typeId, brandsData, typesData);
         })) ?? new CatalogIndexViewModel();
     }
 
