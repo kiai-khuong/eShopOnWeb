@@ -15,6 +15,8 @@ public class CatalogFilterPaginatedSpecification : Specification<CatalogItem>
         Query
             .Where(i => (!brandId.HasValue || i.CatalogBrandId == brandId) &&
             (!typeId.HasValue || i.CatalogTypeId == typeId))
-            .Skip(skip).Take(take);
+            .Skip(skip).Take(take)
+            // Bolt: Added AsNoTracking to improve performance for read-only queries by skipping change tracking.
+            .AsNoTracking();
     }
 }
