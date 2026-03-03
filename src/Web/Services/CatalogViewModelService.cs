@@ -62,7 +62,8 @@ public class CatalogViewModelService : ICatalogViewModelService
                 ActualPage = pageIndex,
                 ItemsPerPage = itemsOnPage.Count,
                 TotalItems = totalItems,
-                TotalPages = int.Parse(Math.Ceiling(((decimal)totalItems / itemsPage)).ToString())
+                // Bolt: Optimized TotalPages calculation by avoiding string-based parsing and decimal overhead.
+                TotalPages = (int)Math.Ceiling((decimal)totalItems / itemsPage)
             }
         };
 
