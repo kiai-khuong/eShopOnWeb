@@ -75,7 +75,7 @@ public class CatalogViewModelService : ICatalogViewModelService
     public async Task<IEnumerable<SelectListItem>> GetBrands()
     {
         _logger.LogInformation("GetBrands called.");
-        var brands = await _brandRepository.ListAsync();
+        var brands = await _brandRepository.ListAsync(new CatalogBrandsSpecification());
 
         var items = brands
             .Select(brand => new SelectListItem() { Value = brand.Id.ToString(), Text = brand.Brand })
@@ -91,7 +91,7 @@ public class CatalogViewModelService : ICatalogViewModelService
     public async Task<IEnumerable<SelectListItem>> GetTypes()
     {
         _logger.LogInformation("GetTypes called.");
-        var types = await _typeRepository.ListAsync();
+        var types = await _typeRepository.ListAsync(new CatalogTypesSpecification());
 
         var items = types
             .Select(type => new SelectListItem() { Value = type.Id.ToString(), Text = type.Type })
