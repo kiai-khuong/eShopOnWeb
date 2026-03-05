@@ -1,0 +1,3 @@
+## 2025-05-14 - [Artificial Delays and AsNoTracking Optimization]
+**Learning:** Found artificial `Task.Delay(1000)` calls in multiple PublicApi endpoints, likely intended for simulating latency in a demo environment. These significantly impact response times. Additionally, identified that catalog filtering specifications were missing `AsNoTracking()`, which is ideal for these read-only paths to reduce EF Core overhead.
+**Action:** Remove artificial delays from API endpoints and implement `AsNoTracking()` in read-only specifications. Ensure asynchronous database calls are used (e.g., `ToListAsync`) when removing delays to maintain non-blocking execution.
