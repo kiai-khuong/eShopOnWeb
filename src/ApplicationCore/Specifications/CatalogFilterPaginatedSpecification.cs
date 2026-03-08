@@ -12,9 +12,11 @@ public class CatalogFilterPaginatedSpecification : Specification<CatalogItem>
         {
             take = int.MaxValue;
         }
+        // Optimization: AsNoTracking improves performance for read-only queries by bypassing change tracking.
         Query
             .Where(i => (!brandId.HasValue || i.CatalogBrandId == brandId) &&
             (!typeId.HasValue || i.CatalogTypeId == typeId))
-            .Skip(skip).Take(take);
+            .Skip(skip).Take(take)
+            .AsNoTracking();
     }
 }
