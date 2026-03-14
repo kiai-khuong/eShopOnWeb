@@ -1,0 +1,3 @@
+## 2025-05-14 - Artificial Latency and Sync Database Calls in Identity
+**Learning:** Found artificial `Task.Delay(1000)` calls in several PublicApi endpoints (CatalogItemListPaged, UserList, RoleList), likely intended to simulate latency. Additionally, Identity managers were using synchronous `.ToList()` on `IQueryable` properties, which blocks the calling thread during database I/O.
+**Action:** Always check for and remove `Task.Delay` in production-ready code. Use `.ToListAsync(ct)` from `Microsoft.EntityFrameworkCore` for all database-backed list operations to improve scalability and thread pool utilization.
