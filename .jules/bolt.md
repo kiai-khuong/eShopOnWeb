@@ -1,0 +1,3 @@
+## 2025-05-14 - Artificial Delays and Identity Async
+**Learning:** The PublicApi project contains artificial 'Task.Delay(1000)' calls in multiple endpoints (UserList, RoleList, CatalogItemListPaged) intended to simulate network latency for demo purposes. Additionally, Identity manager calls (UserManager, RoleManager) in this codebase were using synchronous '.ToList()' instead of asynchronous '.ToListAsync(ct)'.
+**Action:** Always check for and remove 'Task.Delay' in PublicApi endpoints to improve responsiveness. Use '.ToListAsync(ct)' from 'Microsoft.EntityFrameworkCore' for Identity manager queries to ensure non-blocking I/O.
