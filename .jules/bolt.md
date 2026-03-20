@@ -1,0 +1,3 @@
+## 2025-05-15 - Optimizing PublicApi Endpoints and Specifications
+**Learning:** Found artificial `Task.Delay(1000)` calls in several `PublicApi` endpoints (`CatalogItemListPaged`, `UserList`, `RoleList`) which were likely added for simulation but significantly impacted throughput and latency. Additionally, observed synchronous `.ToList()` calls on `IQueryable` in `Identity` management endpoints, which can lead to thread pool starvation.
+**Action:** Always check for `Task.Delay` in API endpoints and ensure all database operations on `IQueryable` use their asynchronous counterparts (`ToListAsync`, etc.) with proper cancellation tokens. Use `Query.AsNoTracking()` in `Ardalis.Specification` for read-only UI/API paths to reduce EF Core tracking overhead.
