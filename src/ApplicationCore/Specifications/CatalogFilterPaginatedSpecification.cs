@@ -8,6 +8,9 @@ public class CatalogFilterPaginatedSpecification : Specification<CatalogItem>
     public CatalogFilterPaginatedSpecification(int skip, int take, int? brandId, int? typeId)
         : base()
     {
+        // PERFORMANCE: Using AsNoTracking for read-only catalog queries to reduce memory and CPU overhead.
+        Query.AsNoTracking();
+
         if (take == 0)
         {
             take = int.MaxValue;
