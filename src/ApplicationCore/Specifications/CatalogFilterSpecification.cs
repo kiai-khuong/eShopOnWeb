@@ -7,7 +7,9 @@ public class CatalogFilterSpecification : Specification<CatalogItem>
 {
     public CatalogFilterSpecification(int? brandId, int? typeId)
     {
+        // PERFORMANCE: Use AsNoTracking for read-only query to reduce memory overhead and improve performance.
         Query.Where(i => (!brandId.HasValue || i.CatalogBrandId == brandId) &&
-            (!typeId.HasValue || i.CatalogTypeId == typeId));
+            (!typeId.HasValue || i.CatalogTypeId == typeId))
+            .AsNoTracking();
     }
 }
