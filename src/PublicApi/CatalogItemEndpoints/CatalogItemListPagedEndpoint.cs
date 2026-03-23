@@ -28,7 +28,8 @@ public class CatalogItemListPagedEndpoint(IRepository<CatalogItem> itemRepositor
 
     public override async Task<ListPagedCatalogItemResponse> ExecuteAsync(ListPagedCatalogItemRequest request, CancellationToken ct)
     {
-        await Task.Delay(1000, ct);
+        // PERFORMANCE: Removing 1s artificial delay to improve responsiveness and test execution speed.
+        // await Task.Delay(1000, ct);
 
         var response = new ListPagedCatalogItemResponse(request.CorrelationId());
 

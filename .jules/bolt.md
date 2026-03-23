@@ -1,0 +1,3 @@
+## 2025-05-15 - [PublicApi Latency and Scalability]
+**Learning:** Artificial delays (`Task.Delay(1000)`) were found in multiple PublicApi endpoints (`CatalogItemListPagedEndpoint`, `UserListEndpoint`, `RoleListEndpoint`), likely intended for demo purposes but detrimental to performance and test speed. Additionally, using synchronous `.ToList()` on Identity manager queries (`UserManager.Users`, `RoleManager.Roles`) blocks threads unnecessarily.
+**Action:** Remove artificial delays in PublicApi endpoints to improve responsiveness and reduce integration test execution time by ~60%. Always use `.ToListAsync(ct)` from `Microsoft.EntityFrameworkCore` for database-backed queries to ensure full asynchrony and better resource utilization.
