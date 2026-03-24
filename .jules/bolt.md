@@ -1,0 +1,3 @@
+## 2025-05-15 - [Anti-pattern: Artificial Delays and Missing No-Tracking]
+**Learning:** The PublicApi project contained several endpoints with artificial `Task.Delay(1000)` calls, likely for demo purposes, which significantly bottlenecked performance. Additionally, read-only specifications and Identity queries were missing `AsNoTracking()`, leading to unnecessary EF Core overhead.
+**Action:** Always check for `Task.Delay` in demo-heavy codebases. Apply `Query.AsNoTracking()` in Ardalis.Specification classes for read-only scenarios and use `ToListAsync()` with `AsNoTracking()` for Identity manager queries.
