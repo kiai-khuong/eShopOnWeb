@@ -24,7 +24,7 @@ public class UserListEndpoint(UserManager<ApplicationUser> userManager):Endpoint
 
     public override async Task<UserListResponse> ExecuteAsync(CancellationToken ct)
     {
-        await Task.Delay(1000, ct);
+        // PERFORMANCE: Removed 1s artificial delay to improve endpoint responsiveness.
         var response = new UserListResponse();
         var users = userManager.Users.ToList();
         foreach ( var user in users)
