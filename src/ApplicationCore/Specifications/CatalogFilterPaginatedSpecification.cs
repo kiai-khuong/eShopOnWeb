@@ -16,5 +16,8 @@ public class CatalogFilterPaginatedSpecification : Specification<CatalogItem>
             .Where(i => (!brandId.HasValue || i.CatalogBrandId == brandId) &&
             (!typeId.HasValue || i.CatalogTypeId == typeId))
             .Skip(skip).Take(take);
+
+        // PERFORMANCE: Disable tracking for read-only catalog filters to reduce memory overhead and improve performance
+        Query.AsNoTracking();
     }
 }
