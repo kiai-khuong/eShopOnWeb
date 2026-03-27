@@ -12,7 +12,8 @@ public class CatalogFilterPaginatedSpecification : Specification<CatalogItem>
         {
             take = int.MaxValue;
         }
-        Query
+        // PERFORMANCE: Use AsNoTracking for read-only paginated query to reduce memory overhead
+        Query.AsNoTracking()
             .Where(i => (!brandId.HasValue || i.CatalogBrandId == brandId) &&
             (!typeId.HasValue || i.CatalogTypeId == typeId))
             .Skip(skip).Take(take);
