@@ -1,0 +1,3 @@
+## 2025-05-14 - Environment SDK Management and Demo Latency
+**Learning:** Updating `global.json` to a newer SDK (e.g., .NET 10.0) to resolve local build failures is a necessary temporary measure in some environments, but it must be reverted to avoid breaking CI/CD or other developers' environments. Additionally, artificial `Task.Delay` calls in sample applications like eShopOnWeb are often intentional to demonstrate loading states; removing them improves "performance" but alters the intended demo experience.
+**Action:** Always revert `global.json` changes before submission. When optimizing, verify if artificial delays are used for demo purposes and document the trade-off.
