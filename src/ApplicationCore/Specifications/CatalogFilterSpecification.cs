@@ -7,7 +7,9 @@ public class CatalogFilterSpecification : Specification<CatalogItem>
 {
     public CatalogFilterSpecification(int? brandId, int? typeId)
     {
+        // PERFORMANCE: Added AsNoTracking() for read-only query optimization.
         Query.Where(i => (!brandId.HasValue || i.CatalogBrandId == brandId) &&
-            (!typeId.HasValue || i.CatalogTypeId == typeId));
+            (!typeId.HasValue || i.CatalogTypeId == typeId))
+            .AsNoTracking();
     }
 }
