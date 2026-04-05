@@ -15,6 +15,7 @@ public class CatalogFilterPaginatedSpecification : Specification<CatalogItem>
         Query
             .Where(i => (!brandId.HasValue || i.CatalogBrandId == brandId) &&
             (!typeId.HasValue || i.CatalogTypeId == typeId))
-            .Skip(skip).Take(take);
+            .Skip(skip).Take(take)
+            .AsNoTracking();
     }
 }
