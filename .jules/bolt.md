@@ -1,0 +1,3 @@
+## 2025-05-14 - Artificial Delays and Sync-over-Async in PublicApi
+**Learning:** Found multiple endpoints in the PublicApi project (CatalogItemListPaged, UserList, RoleList) that contained hardcoded 'Task.Delay(1000)' calls, presumably to simulate latency. Additionally, Identity managers (UserManager/RoleManager) were being queried using synchronous '.ToList()' calls, which is a 'sync-over-async' anti-pattern in ASP.NET Core that can lead to thread pool starvation.
+**Action:** Always check for 'Task.Delay' when profiling PublicApi endpoints. Convert synchronous materialization of IQueryable to asynchronous using '.ToListAsync(ct)' from the 'Microsoft.EntityFrameworkCore' namespace to ensure non-blocking I/O and better scalability.
