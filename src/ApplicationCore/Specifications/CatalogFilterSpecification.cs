@@ -9,5 +9,8 @@ public class CatalogFilterSpecification : Specification<CatalogItem>
     {
         Query.Where(i => (!brandId.HasValue || i.CatalogBrandId == brandId) &&
             (!typeId.HasValue || i.CatalogTypeId == typeId));
+
+        // PERFORMANCE: Reducing memory overhead by disabling change tracking for read-only catalog filters
+        Query.AsNoTracking();
     }
 }
