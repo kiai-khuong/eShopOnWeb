@@ -1,0 +1,3 @@
+## 2025-05-15 - Optimizing Read-Only Catalog Specifications
+**Learning:** In eShopOnWeb, catalog specifications like `CatalogFilterSpecification` and `CatalogFilterPaginatedSpecification` are primarily used for read-only operations (UI display and API listing). Applying `Query.AsNoTracking()` directly within these specifications reduces memory overhead and improves performance by bypassing EF Core's change tracking for entities that are never intended to be updated in the same scope.
+**Action:** Always consider `AsNoTracking()` when implementing or modifying specifications used for high-traffic read-only listing endpoints.
