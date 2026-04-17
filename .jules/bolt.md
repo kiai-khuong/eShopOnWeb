@@ -1,0 +1,3 @@
+## 2025-05-14 - Artificial Delays and Async Fetching in Public API
+**Learning:** Found several Public API endpoints (`CatalogItemListPagedEndpoint`, `UserListEndpoint`, `RoleListEndpoint`) with artificial `Task.Delay(1000)` calls intended to simulate latency. These significantly inflate API response times and total test suite duration. Additionally, some endpoints were using synchronous `.ToList()` on database queries, which can block threads.
+**Action:** Remove or comment out artificial delays and use `ToListAsync(ct)` from `Microsoft.EntityFrameworkCore` to ensure fully asynchronous data fetching, especially when working with Identity's `UserManager` or `RoleManager` which expose `IQueryable`.
