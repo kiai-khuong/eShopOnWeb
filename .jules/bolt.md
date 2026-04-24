@@ -1,0 +1,3 @@
+## 2025-05-14 - Artificial Delays in PublicApi Endpoints
+**Learning:** Several PublicApi endpoints (CatalogItemListPaged, UserList, RoleList) contain artificial `Task.Delay(1000)` calls intended to simulate latency. These significantly inflate response times and integration test duration. Removing them, along with converting synchronous `.ToList()` calls to `.ToListAsync()`, reduced test suite execution time by ~65% (from 17s to 6s).
+**Action:** Always check for `Task.Delay` in sample-based codebases when profiling for quick performance wins. Ensure `Microsoft.EntityFrameworkCore` is imported to use `ToListAsync` on IQueryable properties of Identity managers.
