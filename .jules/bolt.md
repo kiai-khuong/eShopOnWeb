@@ -1,0 +1,3 @@
+## 2025-05-14 - [Discovery of artificial delays and synchronous IQueryable calls in PublicApi]
+**Learning:** Found multiple endpoints in `PublicApi` (`CatalogItemListPagedEndpoint`, `UserListEndpoint`, `RoleListEndpoint`) that had explicit `await Task.Delay(1000, ct);` calls, likely for simulating latency. Additionally, `UserListEndpoint` and `RoleListEndpoint` were using synchronous `.ToList()` on `IQueryable` properties from Identity Managers, which blocks the thread.
+**Action:** Removed artificial delays and converted synchronous database queries to `await ...ToListAsync(ct)` using `Microsoft.EntityFrameworkCore`. This improves both responsiveness and scalability.
