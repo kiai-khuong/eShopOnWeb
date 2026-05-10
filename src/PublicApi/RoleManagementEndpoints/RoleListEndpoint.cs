@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -22,9 +23,11 @@ public class RoleListEndpoint(RoleManager<IdentityRole> roleManager):EndpointWit
 
     public override async Task<RoleListResponse> ExecuteAsync(CancellationToken ct)
     {
-        await Task.Delay(1000, ct);
+        // PERFORMANCE: Removed artificial 1s delay to improve response time (~1s reduction)
         var response = new RoleListResponse();
-        response.Roles = roleManager.Roles.ToList();
+
+        // PERFORMANCE: Using ToListAsync() to avoid blocking the thread while waiting for the database response
+        response.Roles = await roleManager.Roles.ToListAsync(ct);
         return response;
     }
 }
