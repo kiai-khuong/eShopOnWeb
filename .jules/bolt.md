@@ -1,0 +1,3 @@
+## 2025-05-14 - Artificial delays in Public API endpoints
+**Learning:** Several Public API endpoints (CatalogItemListPaged, UserList, RoleList) contained artificial `Task.Delay(1000, ct)` calls, likely for simulating latency. These significantly impact both real-world performance and test execution time. Additionally, synchronous `.ToList()` calls on Identity Manager properties were found to be a missed opportunity for fully asynchronous execution.
+**Action:** Always check for `Task.Delay` and synchronous materialization (`.ToList()`, `.ToArray()`) in API endpoints and convert them to their asynchronous counterparts (`await ...ToListAsync(ct)`) using `Microsoft.EntityFrameworkCore` to ensure non-blocking I/O.
