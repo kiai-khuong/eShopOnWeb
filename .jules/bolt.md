@@ -1,0 +1,3 @@
+## 2026-05-15 - Removing artificial delays and async conversion in PublicApi
+**Learning:** Artificial 'Task.Delay' calls (typically 1000ms) in PublicApi endpoints simulate latency but significantly slow down end-to-end response times and integration test suites. Synchronous '.ToList()' calls on IQueryable properties in Identity managers (UserManager, RoleManager) block threads and should be replaced with '.ToListAsync(ct)' from Microsoft.EntityFrameworkCore.
+**Action:** Always scan for 'Task.Delay' and synchronous materialization in PublicApi endpoints. Ensure 'Microsoft.EntityFrameworkCore' namespace is imported for 'ToListAsync' extension methods.

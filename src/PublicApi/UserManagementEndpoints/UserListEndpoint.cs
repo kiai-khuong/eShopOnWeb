@@ -5,12 +5,13 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopWeb.Infrastructure.Identity;
 using Microsoft.eShopWeb.PublicApi.Extensions;
 
 namespace Microsoft.eShopWeb.PublicApi.UserManagementEndpoints;
 
-public class UserListEndpoint(UserManager<ApplicationUser> userManager):EndpointWithoutRequest<UserListResponse>
+public class UserListEndpoint(UserManager<ApplicationUser> userManager) : EndpointWithoutRequest<UserListResponse>
 {
 
     public override void Configure()
@@ -24,10 +25,11 @@ public class UserListEndpoint(UserManager<ApplicationUser> userManager):Endpoint
 
     public override async Task<UserListResponse> ExecuteAsync(CancellationToken ct)
     {
-        await Task.Delay(1000, ct);
+        // PERFORMANCE: Removes 1000ms artificial delay and improves scalability by using async database access.
+        // Expected improvement: ~1s reduction in response time.
         var response = new UserListResponse();
-        var users = userManager.Users.ToList();
-        foreach ( var user in users)
+        var users = await userManager.Users.ToListAsync(ct);
+        foreach (var user in users)
         {
             response.Users.Add(user.ToUserDto());
         }

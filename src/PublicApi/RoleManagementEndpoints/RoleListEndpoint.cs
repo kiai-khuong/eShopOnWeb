@@ -5,10 +5,11 @@ using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Microsoft.eShopWeb.PublicApi.RoleManagementEndpoints;
 
-public class RoleListEndpoint(RoleManager<IdentityRole> roleManager):EndpointWithoutRequest<RoleListResponse>
+public class RoleListEndpoint(RoleManager<IdentityRole> roleManager) : EndpointWithoutRequest<RoleListResponse>
 {
 
     public override void Configure()
@@ -22,9 +23,10 @@ public class RoleListEndpoint(RoleManager<IdentityRole> roleManager):EndpointWit
 
     public override async Task<RoleListResponse> ExecuteAsync(CancellationToken ct)
     {
-        await Task.Delay(1000, ct);
+        // PERFORMANCE: Removes 1000ms artificial delay and improves scalability by using async database access.
+        // Expected improvement: ~1s reduction in response time.
         var response = new RoleListResponse();
-        response.Roles = roleManager.Roles.ToList();
+        response.Roles = await roleManager.Roles.ToListAsync(ct);
         return response;
     }
 }
