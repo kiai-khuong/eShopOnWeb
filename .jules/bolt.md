@@ -1,0 +1,3 @@
+## 2025-05-22 - Artificial Latency in PublicApi Endpoints
+**Learning:** Several PublicApi endpoints (CatalogItemListPaged, UserList, RoleList) contain explicit `await Task.Delay(1000)` calls, significantly inflating response times and test durations. Additionally, Identity manager queries were using synchronous `.ToList()` instead of `.ToListAsync()`.
+**Action:** Always check for `Task.Delay` and synchronous materialization (`.ToList()`, `.ToArray()`) on `IQueryable` properties like `UserManager.Users` or `RoleManager.Roles` in API endpoints. Use `Microsoft.EntityFrameworkCore` extension methods for async materialization.
