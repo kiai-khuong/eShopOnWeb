@@ -1,0 +1,3 @@
+## 2026-05-25 - Removing Artificial Delays and Optimizing Async Data Fetching in PublicApi
+**Learning:** Artificial 'Task.Delay' calls (often 1000ms) are sometimes used to simulate latency in samples or templates. Removing them provides an immediate and massive performance boost (1s reduction per request). Additionally, converting synchronous '.ToList()' calls on IQueryable to 'await ...ToListAsync(ct)' from 'Microsoft.EntityFrameworkCore' improves thread utilization and scalability by avoiding blocking I/O.
+**Action:** Always scan for 'Task.Delay' and synchronous materialization ('.ToList()', '.ToArray()') on DB queries in web endpoints to find quick performance wins.
