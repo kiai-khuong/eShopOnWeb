@@ -1,0 +1,3 @@
+## 2026-06-11 - Removed artificial delays and optimized Identity queries in PublicApi
+**Learning:** The PublicApi project contained 1000ms artificial delays in UserList, RoleList, and CatalogItemListPaged endpoints, likely for simulating network latency. Removing these significantly improved API response times and halved the PublicApiIntegrationTests execution time (from ~16s to ~6s). Additionally, Identity Manager queries (UserManager.Users, RoleManager.Roles) were synchronous (.ToList()), which can block threads; converting them to .ToListAsync() is a best practice for scalability.
+**Action:** Always check for Task.Delay and synchronous materialization (.ToList(), .ToArray()) on IQueryable properties in API endpoints.
