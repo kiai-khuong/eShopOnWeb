@@ -1,0 +1,3 @@
+## 2026-06-20 - [Artificial Latency and Sync I/O]
+**Learning:** The PublicApi project contained artificial `Task.Delay(1000)` calls in several list endpoints (Catalog, Users, Roles) to simulate latency. Additionally, Identity Manager queries were being executed synchronously using `.ToList()`, which blocks thread pool threads.
+**Action:** Always check for `Task.Delay` and synchronous list materialization (like `.ToList()` on `IQueryable`) in API endpoints. Removing artificial delays and using `ToListAsync(ct)` (with `using Microsoft.EntityFrameworkCore;`) provides significant latency reduction and improved scalability.
