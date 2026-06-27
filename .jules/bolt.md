@@ -1,0 +1,3 @@
+## 2026-06-27 - Artificial Delays and Synchronous Identity Queries in PublicApi
+**Learning:** Multiple PublicApi endpoints (UserList, RoleList, CatalogItemListPaged) contain artificial 'Task.Delay(1000, ct)' calls to simulate latency. Additionally, Identity queries in these endpoints were using synchronous '.ToList()', which blocks threads unnecessarily.
+**Action:** Always check for 'Task.Delay' and synchronous materialization (like '.ToList()') on 'IQueryable' properties in API endpoints. Removing these delays and converting to 'ToListAsync()' (requires 'Microsoft.EntityFrameworkCore') significantly improves response times and scalability.
