@@ -1,0 +1,3 @@
+## 2025-05-14 - [Artificial delays and synchronous Identity queries in PublicApi]
+**Learning:** Multiple PublicApi endpoints (UserList, RoleList, CatalogItemListPaged) contain artificial `Task.Delay(1000, ct)` calls likely used to simulate latency. Additionally, Identity Manager queries (UserManager.Users, RoleManager.Roles) were being materialized synchronously using `.ToList()`, which blocks threads.
+**Action:** Remove artificial `Task.Delay` calls and convert synchronous materialization to `await ...ToListAsync(ct)` by adding `using Microsoft.EntityFrameworkCore;`. This significantly reduces latency and improves thread pool efficiency.
