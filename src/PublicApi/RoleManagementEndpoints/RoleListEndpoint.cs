@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
@@ -22,9 +23,9 @@ public class RoleListEndpoint(RoleManager<IdentityRole> roleManager):EndpointWit
 
     public override async Task<RoleListResponse> ExecuteAsync(CancellationToken ct)
     {
-        await Task.Delay(1000, ct);
+        // PERFORMANCE: Removed artificial delay and converted to async query to improve response time and thread efficiency.
         var response = new RoleListResponse();
-        response.Roles = roleManager.Roles.ToList();
+        response.Roles = await roleManager.Roles.ToListAsync(ct);
         return response;
     }
 }
