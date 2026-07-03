@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
@@ -24,9 +25,9 @@ public class UserListEndpoint(UserManager<ApplicationUser> userManager):Endpoint
 
     public override async Task<UserListResponse> ExecuteAsync(CancellationToken ct)
     {
-        await Task.Delay(1000, ct);
+        // PERFORMANCE: Removed artificial delay and converted to async query to improve response time and thread efficiency.
         var response = new UserListResponse();
-        var users = userManager.Users.ToList();
+        var users = await userManager.Users.ToListAsync(ct);
         foreach ( var user in users)
         {
             response.Users.Add(user.ToUserDto());
