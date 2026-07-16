@@ -1,0 +1,3 @@
+## 2025-02-15 - Simulating Latency in Production Endpoints & Synchronous IQueryable Materialization
+**Learning:** Multiple PublicApi endpoints (such as `UserListEndpoint` and `RoleListEndpoint`) contain artificial `Task.Delay(1000, ct)` calls designed to simulate latency or wait times. Additionally, they perform synchronous list materialization via `.ToList()` on underlying Identity Managers' `IQueryable` properties, which blocks threads unnecessarily.
+**Action:** Remove any artificial delays in high-priority endpoints and convert all blocking synchronous query materializations (e.g., `.ToList()`) to non-blocking asynchronous calls (e.g., `.ToListAsync(ct)`) using EF Core to free up ThreadPool threads and boost API responsiveness.
