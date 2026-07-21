@@ -1,0 +1,3 @@
+## 2025-10-24 - PublicApi Latency and Thread Blockers Removal
+**Learning:** Multiple PublicApi endpoints (UserList, RoleList, CatalogItemListPaged) contained artificial 'Task.Delay(1000, ct)' calls that simulated latency, and synchronous Identity queries with '.ToList()' blocked thread pool threads on DB IO. Removing the delays and switching Identity queries to 'ToListAsync(ct)' significantly reduces integration test execution time and endpoint response time.
+**Action:** Always search for artificial Task.Delay calls or synchronous list materializations on IQueryable properties in API endpoints when addressing performance issues.
