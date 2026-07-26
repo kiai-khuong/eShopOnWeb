@@ -1,0 +1,3 @@
+## 2026-07-26 - Optimized Identity Endpoints and Removed Artificial Delays
+**Learning:** Multiple PublicApi endpoints (UserList, RoleList) contained artificial 'Task.Delay(1000, ct)' calls to simulate network latency, which severely inflated integration test runtimes. In addition, changing the synchronous Identity queries from '.ToList()' to EF Core's asynchronous '.ToListAsync(ct)' method prevents thread pool starvation.
+**Action:** Always identify and remove simulated delay logic in test-heavy or frequently called endpoints, and convert list fetches to their corresponding async EF extensions to improve performance.
