@@ -1,0 +1,3 @@
+## 2025-03-10 - Artificial Latency and Synchronous Queries in PublicApi Endpoints
+**Learning:** Multiple PublicApi endpoints (UserList, RoleList, CatalogItemListPaged) contain artificial `Task.Delay(1000, ct)` calls likely used to simulate latency; removing these and converting synchronous Identity queries (`.ToList()`) to asynchronous queries (`.ToListAsync(ct)`) significantly improves response times and throughput.
+**Action:** Always inspect endpoint query pipelines and remove any artificial simulated delays or blockages, and ensure entity-related collections are queried using Entity Framework Core's async extensions (e.g., `ToListAsync`) to keep threads free under load.
