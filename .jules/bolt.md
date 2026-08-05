@@ -1,0 +1,3 @@
+## 2025-08-05 - Simulated Latency and Sync Identity Queries
+**Learning:** Multiple PublicApi endpoints (UserList, RoleList, CatalogItemListPaged) contained artificial `Task.Delay(1000, ct)` calls which introduced 1000ms of non-blocking latency per request. Additionally, UserList and RoleList queried ASP.NET Core Identity users and roles synchronously via `.ToList()`, blocking thread pool threads and reducing throughput.
+**Action:** Removed the artificial `Task.Delay` calls and converted the Identity queries to asynchronous database calls using EF Core's `.ToListAsync(ct)`. This significantly improved response times (reducing endpoint latency by 1000ms+) and optimized thread utilization.
