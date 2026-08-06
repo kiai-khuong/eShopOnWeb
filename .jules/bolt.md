@@ -1,0 +1,3 @@
+## 2025-02-12 - Identity Endpoints Optimization
+**Learning:** In the eShopOnWeb architecture, several public API administration endpoints contain artificial 1-second delays (`Task.Delay(1000, ct)`) and perform synchronous database queries (e.g. `.ToList()`) on ASP.NET Core Identity managers (such as `UserManager<T>` and `RoleManager<T>`). Converting these queries to use EF Core async extensions (like `ToListAsync()`) and removing the artificial delays drastically improves endpoint responsiveness and test suite execution time.
+**Action:** When implementing or modifying Identity endpoints, always avoid artificial latency. Ensure `using Microsoft.EntityFrameworkCore;` is referenced to unlock the `ToListAsync` extension methods on `IQueryable` from Identity managers.
