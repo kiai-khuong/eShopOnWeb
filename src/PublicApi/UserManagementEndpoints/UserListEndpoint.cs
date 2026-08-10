@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -24,9 +25,10 @@ public class UserListEndpoint(UserManager<ApplicationUser> userManager):Endpoint
 
     public override async Task<UserListResponse> ExecuteAsync(CancellationToken ct)
     {
-        await Task.Delay(1000, ct);
+        // PERFORMANCE: Removed artificial 1000ms delay and optimized synchronous userManager.Users.ToList() to use EF Core ToListAsync(ct)
+        // This avoids blocking threads on I/O and reduces response latency by over 1000ms.
         var response = new UserListResponse();
-        var users = userManager.Users.ToList();
+        var users = await userManager.Users.ToListAsync(cancellationToken: ct);
         foreach ( var user in users)
         {
             response.Users.Add(user.ToUserDto());
