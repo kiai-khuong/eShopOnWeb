@@ -1,0 +1,3 @@
+## 2025-03-10 - PublicApi Endpoints Artificial Delay and Synchronous Identity Query Optimization
+**Learning:** Multiple PublicApi endpoints (UserList, RoleList, CatalogItemListPaged) contained artificial `Task.Delay(1000, ct)` calls that added significant latency. Removing these delays and converting synchronous Identity queries (`ToList()`) to asynchronous queries (`ToListAsync(ct)`) drastically improved application efficiency, reducing PublicApi integration tests suite execution time from 17s down to 5s.
+**Action:** Always check PublicApi and controller endpoints for artificial delays or blocking synchronous database/identity manager queries. Use asynchronous EF extensions and omit any arbitrary sleep/delay tasks to prevent thread starvation and unnecessary latency.
