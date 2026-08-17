@@ -1,0 +1,3 @@
+## 2025-05-18 - Eliminating Artificial Latency and Blocking EF Core Queries in PublicApi Endpoints
+**Learning:** Multiple PublicApi endpoints (`CatalogItemListPagedEndpoint`, `UserListEndpoint`, `RoleListEndpoint`) contained artificial `Task.Delay(1000, ct)` calls and synchronous Entity Framework `.ToList()` queries. Removing the delays and switching Identity manager queries to asynchronous `.ToListAsync(ct)` reduces response times by 1000ms+ per request and prevents thread pool starvation.
+**Action:** Always scan API endpoints for artificial delays or synchronous DB calls (`.ToList()`, `.FirstOrDefault()`) and convert them to asynchronous EF Core extensions (`ToListAsync()`, `FirstOrDefaultAsync()`).
