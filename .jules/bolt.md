@@ -1,0 +1,3 @@
+## 2025-05-18 - Identity PublicApi Async Query & Latency Optimization
+**Learning:** PublicApi endpoints for UserList and RoleList contain artificial 1-second delays (`Task.Delay`) and use synchronous EF queries (`.ToList()`). Converting them to EF Core's async `ToListAsync(ct)` and removing the artificial delays drastically improves endpoint responsiveness and reduces test execution times without breaking functional behavior.
+**Action:** Always prefer EF Core async methods (`ToListAsync`, `FirstOrDefaultAsync`) when querying database contexts, and eliminate artificial delay simulation in production endpoints.
