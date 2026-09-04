@@ -1,0 +1,3 @@
+## 2025-05-18 - Eliminating Artificial Latency & Sync DB Queries in PublicApi Identity Endpoints
+**Learning:** Multiple PublicApi endpoints in this codebase contain artificial `Task.Delay(1000)` calls alongside synchronous `.ToList()` queries against ASP.NET Core Identity managers (`UserManager` / `RoleManager`). Removing artificial delays and leveraging `Microsoft.EntityFrameworkCore` extension methods like `ToListAsync()` yields massive response time reductions (from ~1s+ down to ~5ms) and frees up ASP.NET thread pool workers under load.
+**Action:** Always inspect PublicApi endpoint `ExecuteAsync` implementations for lingering `Task.Delay` calls and convert synchronous LINQ DB evaluations to EF Core async extensions (`ToListAsync`, `FirstOrDefaultAsync`).
