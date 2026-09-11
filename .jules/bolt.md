@@ -1,0 +1,3 @@
+## 2025-05-18 - Identity Management Endpoints Async Conversion and Delay Removal
+**Learning:** In PublicApi, endpoints like UserListEndpoint and RoleListEndpoint contained artificial 1s `Task.Delay` calls and performed synchronous `.ToList()` evaluation on EF Core `IQueryable` Identity collections (`userManager.Users` and `roleManager.Roles`). Converting these to `ToListAsync(ct)` using `Microsoft.EntityFrameworkCore` and removing the 1s delays significantly improves response time and prevents thread pool blocking.
+**Action:** Always import `Microsoft.EntityFrameworkCore` on `UserManager`/`RoleManager` queries in PublicApi endpoints to perform asynchronous execution with `ToListAsync(ct)`.
