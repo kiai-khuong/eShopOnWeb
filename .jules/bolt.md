@@ -1,0 +1,3 @@
+## 2025-05-18 - Latency Removal and Async Query Execution in PublicApi Endpoints
+**Learning:** PublicApi endpoints (`CatalogItemListPaged`, `UserList`, `RoleList`) contained artificial `Task.Delay(1000, ct)` calls and synchronous `.ToList()` database queries on `UserManager` and `RoleManager`. Removing artificial delays and using asynchronous EF Core extension methods (`ToListAsync`) significantly reduces API response times and prevents thread pool starvation under high concurrent loads.
+**Action:** Always check API endpoints for artificial delays or synchronous DB/Identity calls (`.ToList()`) and replace them with `ToListAsync(ct)`.
