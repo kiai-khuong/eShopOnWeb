@@ -1,0 +1,3 @@
+## 2025-02-28 - Async Identity Endpoint Queries & Delay Removal
+**Learning:** PublicApi endpoints `UserListEndpoint` and `RoleListEndpoint` contained artificial `Task.Delay(1000)` statements and used synchronous `IQueryable.ToList()` calls on EF Identity `UserManager` and `RoleManager` queries. Removing delays and converting to `await ...ToListAsync(ct)` reduces latency by ~1s per endpoint call and avoids thread pool blocking during database reads.
+**Action:** Always inspect Identity and API endpoints for synthetic delays and ensure EF Core queryable executions use async extension methods like `ToListAsync(ct)`.
