@@ -1,0 +1,3 @@
+## 2025-05-18 - PublicApi Endpoint Latency & Sync EF Query Optimizations
+**Learning:** PublicApi endpoints (`CatalogItemListPagedEndpoint`, `UserListEndpoint`, `RoleListEndpoint`) contained artificial 1-second `Task.Delay(1000, ct)` latency injections. Additionally, identity endpoints (`UserListEndpoint`, `RoleListEndpoint`) queried Entity Framework synchronously with `.ToList()`, blocking thread pool threads.
+**Action:** Remove artificial `Task.Delay` calls and convert synchronous EF queries to `await ...ToListAsync(ct)` using `Microsoft.EntityFrameworkCore` to improve API response time and throughput.
