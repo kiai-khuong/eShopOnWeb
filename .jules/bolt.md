@@ -1,0 +1,3 @@
+## 2025-02-20 - PublicApi Identity Endpoints Artificial Delay Removal & Async Query Optimization
+**Learning:** PublicApi identity list endpoints (`UserListEndpoint`, `RoleListEndpoint`) contained artificial 1-second delay calls (`Task.Delay(1000)`) and synchronous `.ToList()` execution on Entity Framework Core `IQueryable`s, blocking thread pool threads and increasing response latency unnecessarily.
+**Action:** Remove `Task.Delay` calls and convert `.ToList()` to `await ...ToListAsync(ct)` using `Microsoft.EntityFrameworkCore` extension methods to optimize response latency and non-blocking asynchronous execution.
