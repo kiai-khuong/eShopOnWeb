@@ -1,0 +1,3 @@
+## 2025-05-20 - Latency & Async EF Core Optimizations in PublicApi Endpoints
+**Learning:** Multiple PublicApi endpoints (UserListEndpoint, RoleListEndpoint, CatalogItemListPagedEndpoint) contained artificial 1000ms `Task.Delay` calls and synchronous EF Core query evaluations (`.ToList()`). Removing the delays and switching to EF Core's asynchronous `ToListAsync(ct)` drastically improves API endpoint responsiveness and prevents thread pool thread starvation under load.
+**Action:** Always check API endpoints for artificial latency delays and synchronous database calls. Convert `.ToList()` on `IQueryable` to `await ...ToListAsync(ct)` using `Microsoft.EntityFrameworkCore`.
